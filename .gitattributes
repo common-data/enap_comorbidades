@@ -1,1 +1,1 @@
-dados/covid_indicadores_20200731.csv filter=lfs diff=lfs merge=lfs -text
+dados/covid_indicadores_acumulado_20200731.csv filter=lfs diff=lfs merge=lfs -text

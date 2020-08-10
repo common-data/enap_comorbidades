@@ -1,8 +1,10 @@
 # ##########################################################################
 # Esse código visa criar uma base de dados para o projeto da ENAP filtrando
 # o que já temos no projeto geral do common_data com o banco da Covid-19
+# e criando uma base com os indicadores com dados do covid
 # This code was made to create a database for the ENAP project filtering
 # what we have for the general project for common_data with the covid data
+# and create a database with indicators as the base adding covid data
 # ##########################################################################
 
 import pandas as pd
@@ -10,9 +12,9 @@ import numpy as np
 import os
 import inspect
 
-# Utilizando a pasta no meu computador
-# Using the folder in my computer
-path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+################################
+# Acumulado - Cumulative
+################################
 
 # Pegando a base e filtrando pro período do estudo e retirando as cidades Indefinidas
 # Getting the database and filtering on the period and excluding the cities "Indefinidas"
@@ -45,7 +47,7 @@ covid = covid[['city_ibge_code','name','code_state','state','Region','place_type
      'RAZDEP','GINI','PIND','PMPOB','PPOB','RDPC','T_AGUA','T_BANAGUA','T_DENS','AGUA_ESGOTO', 'T_RMAXIDOSO',
      'IDHM', 'IDHM_E', 'IDHM_L', 'IDHM_R']]
 
-covid.columns = ["COD_IBGE","Nome","COD_UF","UF","Regiao","Classe_cidade","Subclasse_cidade","Regiao_saude",
+covid.columns = ["COD_IBGE","Nome","COD_UF","UF","Regiao","Classe_local","Subclasse_local","Regiao_saude",
                   "Pop_estimada_2019","Data","Dias_primeiro_confirmado","Dias_primeira_morte","Semana_epidemiologica",
                   "Confirmados","Mortes","Confirmados_100mil","Mortes_100mil","Novos_confirmados","Novas_mortes",
                   "Latitude","Longitude","Distancia_capitalUF","Distancia_capital_mais_proxima",
@@ -57,6 +59,67 @@ covid.columns = ["COD_IBGE","Nome","COD_UF","UF","Regiao","Classe_cidade","Subcl
 
 # Transformando em um banco de dados CSV
 # Sending to a CSV file
-covid.to_csv("enap_comorbidades\dados\covid_indicadores_20200731.csv", index=False, encoding='utf-8-sig')
+covid.to_csv("enap_comorbidades\dados\covid_indicadores_acumulado_20200731.csv", index=False, encoding='utf-8-sig')
 covid.columns
 
+
+################################
+# Indicadores + Covid - Indicators + Covid
+################################
+
+# Pegando a base de indicadores
+# Getting indicators base
+indicadores = pd.read_csv("common_data\data\outras\IndicadoresSociais_mun_distance.csv")
+indicadores.sort_values(["codigo_ibge"], inplace=True)
+
+# Corrigindo alguns nomes
+# Fixing some names
+indicadores.loc[indicadores["codigo_ibge"] == 2405306,["nome"]] = "Januário Cicco"
+indicadores.loc[indicadores["codigo_ibge"] == 2512606,["nome"]] = "Quixaba"
+indicadores.loc[indicadores["codigo_ibge"] == 2613107,["nome"]] = "São Caitano"
+indicadores.loc[indicadores["codigo_ibge"] == 2918753,["nome"]] = "Lagoa Real"
+indicadores.loc[indicadores["codigo_ibge"] == 2918803,["nome"]] = "Laje"
+indicadores.loc[indicadores["codigo_ibge"] == 2918902,["nome"]] = "Lajedão"
+indicadores.loc[indicadores["codigo_ibge"] == 2919009,["nome"]] = "Lajedinho"
+indicadores.loc[indicadores["codigo_ibge"] == 2919058,["nome"]] = "Lajedo do Tabocal"
+indicadores.loc[indicadores["codigo_ibge"] == 3122900,["nome"]] = "Dona Euzébia"
+indicadores.loc[indicadores["codigo_ibge"] == 4215687,["nome"]] = "Santa Terezinha do Progresso"
+indicadores.loc[indicadores["codigo_ibge"] == 4215695,["nome"]] = "Santiago do Sul"
+
+# Renomeando as variàveis e reordenando
+# Renaming the variables and reordering columns
+indicadores.rename(columns={"codigo_ibge":"COD_IBGE","nome":"Nome","codigo_uf":"COD_UF","Região":"Regiao",
+    "tipo":"Classe_local","health_region":"Regiao_saude", "POP":"Pop_estimada_2019", "latitude":"Latitude",
+    "longitude":"Longitude", "distance_capital":"Distancia_capitalUF",
+    "distance_nearest_capital":"Distancia_capital_mais_proxima",
+    "distance_nearest_bigcity":"Distancia_cidade150mil"}, inplace=True)
+columns_to_keep_as_it_is = ["COD_IBGE","Nome","COD_UF","UF", "Regiao","Classe_local","Regiao_saude",
+                            "Pop_estimada_2019","Latitude","Longitude","Distancia_capitalUF",
+                            "Distancia_capital_mais_proxima","Distancia_cidade150mil"]
+columns_to_keep_as_it_is.extend(indicadores.columns.to_list()[15:-4])
+indicadores = indicadores[columns_to_keep_as_it_is]
+
+# Adicionando variáveis Covid para o dia 31/07
+# Adding variables Covid for 31/07
+adicionar = covid[covid["Data"] == "2020-07-31"][["COD_IBGE", 'Confirmados', 'Mortes', 'Confirmados_100mil',
+       'Mortes_100mil', 'Dias_primeiro_confirmado', 'Dias_primeira_morte']]
+adicionar["Dias_ate_morte"] = adicionar["Dias_primeiro_confirmado"] - adicionar["Dias_primeira_morte"]
+adicionar["Dias_ate_confirmado_brasil"] = max(adicionar["Dias_primeiro_confirmado"]) - adicionar["Dias_primeiro_confirmado"]
+adicionar["Aceleracao_confirmados"] = adicionar["Confirmados"] / adicionar["Dias_primeiro_confirmado"]
+adicionar["Aceleracao_mortes"] = adicionar["Mortes"] / adicionar["Dias_primeira_morte"]
+
+indicadores = indicadores.merge(adicionar, how='left', on='COD_IBGE', copy=False, validate="one_to_one")
+
+
+# Criando uma variável Status COVID
+conditions = [
+    (indicadores["Confirmados"] > 0) & (indicadores["Mortes"] > 0),
+    (indicadores["Confirmados"] > 0)]
+choices = ['Confirmados com Mortes', 'Confirmados sem Mortes']
+indicadores["Status_Covid"] = np.select(conditions, choices, default='Sem confirmados')
+
+
+# Transformando em um banco de dados CSV
+# Sending to a CSV file
+indicadores.to_csv("enap_comorbidades\dados\covid_indicadores_20200731.csv", index=False, encoding='utf-8-sig')
+indicadores.columns
