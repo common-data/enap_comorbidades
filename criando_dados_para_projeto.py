@@ -86,17 +86,24 @@ indicadores.loc[indicadores["codigo_ibge"] == 3122900,["nome"]] = "Dona Euzébia
 indicadores.loc[indicadores["codigo_ibge"] == 4215687,["nome"]] = "Santa Terezinha do Progresso"
 indicadores.loc[indicadores["codigo_ibge"] == 4215695,["nome"]] = "Santiago do Sul"
 
+indicadores.loc[indicadores["tipo"] == "CapitalMun",["tipo"]] = "Capital"
+
+
 # Renomeando as variàveis e reordenando
 # Renaming the variables and reordering columns
 indicadores.rename(columns={"codigo_ibge":"COD_IBGE","nome":"Nome","codigo_uf":"COD_UF","Região":"Regiao",
     "tipo":"Classe_local","health_region":"Regiao_saude", "POP":"Pop_estimada_2019", "latitude":"Latitude",
     "longitude":"Longitude", "distance_capital":"Distancia_capitalUF",
     "distance_nearest_capital":"Distancia_capital_mais_proxima",
-    "distance_nearest_bigcity":"Distancia_cidade150mil"}, inplace=True)
+    "distance_nearest_bigcity":"Distancia_cidade150mil", 'RAZDEP':"Razao_dependencia","GINI":"Gini",
+    'PIND':"Perc_extremamente_pobres_menos70",'PMPOB':"Perc_pobres_menos140",'PPOB':"Perc_vulneraveis_pobreza_menos255",
+    'T_AGUA':"Perc_dom_agua_encanada",'T_BANAGUA':"Perc_dom_banheiro_agua_encanada",
+    'T_DENS':"Perc_pop_densidade_2dorm",'AGUA_ESGOTO':"Perc_pop_agua_esgoto_inadequado",
+    'T_RMAXIDOSO':"Perc_pop_vulneraveis_depIdoso"}, inplace=True)
 columns_to_keep_as_it_is = ["COD_IBGE","Nome","COD_UF","UF", "Regiao","Classe_local","Regiao_saude",
                             "Pop_estimada_2019","Latitude","Longitude","Distancia_capitalUF",
                             "Distancia_capital_mais_proxima","Distancia_cidade150mil"]
-columns_to_keep_as_it_is.extend(indicadores.columns.to_list()[15:-4])
+columns_to_keep_as_it_is.extend(indicadores.columns.to_list()[15:-27])
 indicadores = indicadores[columns_to_keep_as_it_is]
 
 # Adicionando variáveis Covid para o dia 31/07

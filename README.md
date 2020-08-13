@@ -1,2 +1,8 @@
 # ENAP Comorbidades Sociais e Covid-19
 Esse repositório será usado para compartilhar dados, códigos, resultados e relatórios para o projeto "COMORBIDADES SOCIAIS E COVID-19: a desigualdade como desafio da gestão  pública em tempos de crise" do Edital da ENAP n 69, de 30 de junho de 2020.
+
+As fontes de dados utilizados foram:
+- Brasil.io: dados diários de Covid-19 por município/UF atualizado no dia 08/08/2020. Os dados originais foram tratados zerando os primeiros casos em que a primeira atualização acontecia e a próxima atualização era o mesmo valor negativo, por exemplo no dia 1/7/2020 a cidade X teve sua primeira notificação com 5 casos, a próxima atualização no dia 3/7/2020 houve uma correção e o número de casos foi -5, dessa forma os casos nos dois dias foi zerado. Foi utilizado o mesmo método para mortes. Um segundo tratamento nos dados foi excluir os dias anteriores ao primeiro caso confirmado.
+- Atlas do Desenvolvimento Urbano do Brasil: índices de IDH (Índice de Desenvolvimento Humano) municipais de 2013. 
+- IBGE: informação de latitude e longitude do município/UF e população estimada de 2019 (já no banco do Brasil.io). Com a informação de latitude e longitude, calculamos a distância em linha reta entre os municípios obtendo 3 distâncias: até a capital da UF, mínima até uma das 26 capitais + Distrito Federal, mínima até uma cidade com 150 mil habitantes.
+- Agência Nacional de Saúde Suplementar - ANS: região de saúde de acordo com a Resolução Normativa – RN nº 259, de 17 de junho de 2011. Alguns municípios do atlas estavam faltando dados no banco em Excel, então foi utilizado o Powerpoint complementar da ANS para preencher essa informação.
