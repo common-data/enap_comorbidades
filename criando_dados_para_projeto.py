@@ -92,7 +92,7 @@ indicadores.loc[indicadores["tipo"] == "CapitalMun",["tipo"]] = "Capital"
 # Renomeando as variàveis e reordenando
 # Renaming the variables and reordering columns
 indicadores.rename(columns={"codigo_ibge":"COD_IBGE","nome":"Nome","codigo_uf":"COD_UF","Região":"Regiao",
-    "tipo":"Classe_local","health_region":"Regiao_saude", "POP":"Pop_estimada_2019", "latitude":"Latitude",
+    "tipo":"Classe_local","health_region":"Regiao_saude", "POP_TCU":"Pop_estimada_2019", "latitude":"Latitude",
     "longitude":"Longitude", "distance_capital":"Distancia_capitalUF",
     "distance_nearest_capital":"Distancia_capital_mais_proxima",
     "distance_nearest_bigcity":"Distancia_cidade150mil", 'RAZDEP':"Razao_dependencia","GINI":"Gini",
@@ -110,6 +110,11 @@ indicadores = indicadores[columns_to_keep_as_it_is]
 # Adding variables Covid for 31/07
 adicionar = covid[covid["Data"] == "2020-07-31"][["COD_IBGE", 'Confirmados', 'Mortes', 'Confirmados_100mil',
        'Mortes_100mil', 'Dias_primeiro_confirmado', 'Dias_primeira_morte']]
+# 0 significa sem nenhuma morte, pra diferenciar de quem teve morte no primeiro dia nos cálculos seguintes
+# 0 means no death, to differentiate to those that had death on first day, we´re nullifying
+adicionar.loc[adicionar["Dias_primeira_morte"] == 0, "Dias_primeira_morte"] = np.nan
+# Calcular as varíaveis extras
+# Calculating extra variables
 adicionar["Dias_ate_morte"] = adicionar["Dias_primeiro_confirmado"] - adicionar["Dias_primeira_morte"]
 adicionar["Dias_ate_confirmado_brasil"] = max(adicionar["Dias_primeiro_confirmado"]) - adicionar["Dias_primeiro_confirmado"]
 adicionar["Aceleracao_confirmados"] = adicionar["Confirmados"] / adicionar["Dias_primeiro_confirmado"]
@@ -118,7 +123,18 @@ adicionar["Aceleracao_mortes"] = adicionar["Mortes"] / adicionar["Dias_primeira_
 indicadores = indicadores.merge(adicionar, how='left', on='COD_IBGE', copy=False, validate="one_to_one")
 
 
-# Criando uma variável Status COVID
+# Transformando variáveis Covid em 0 ou nulo
+# Transform Covid variables in 0 or null
+indicadores.loc[indicadores["Confirmados"].isna(),
+                ["Dias_primeiro_confirmado", "Dias_primeira_morte", "Dias_ate_morte", "Dias_ate_confirmado_brasil"]] = np.nan
+
+indicadores.loc[indicadores["Confirmados"].isna(),
+                ["Confirmados", "Mortes", "Confirmados_100mil", "Mortes_100mil",
+                 "Aceleracao_confirmados", "Aceleracao_mortes"]] = 0
+
+
+# Criando variáveis
+# Creating variables
 conditions = [
     (indicadores["Confirmados"] > 0) & (indicadores["Mortes"] > 0),
     (indicadores["Confirmados"] > 0)]
