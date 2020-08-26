@@ -48,6 +48,14 @@ As colunas finais são:
 - `Dias_primeira_morte`: número de dias entre 31/07/1986 e a data da primeira morte.
 - `Dias_ate_morte`: número de dias entre o primeiro caso confirmado e a primeira morte.
 - `Dias_ate_confirmado_brasil`: número de dias entre o primeiro caso brasileiro e o primeiro caso confirmado no município/UF.
-- `Aceleracao_confirmados`: Número médio de confirmados por dia no municipio/UF.
-- `Aceleracao_mortes`: Número médio de mortes por dia no município/UF.
-- `Status_Covid`: Status do município/UF de acordo com o Covid-19, podendo ser `Confirmados com Mortes`, `Confirmados sem Mortes` ou `Sem confirmados`.
+- `Aceleracao_confirmados`: número médio de confirmados por dia no municipio/UF.
+- `Aceleracao_mortes`: número médio de mortes por dia no município/UF.
+- `Status_Covid`: status do município/UF de acordo com o Covid-19, podendo ser `Confirmados com Mortes`, `Confirmados sem Mortes` ou `Sem confirmados`.
+- 'Aux_emerg_abril_n': número de pessoas que receberam o auxílio emergencial em abril/2020.
+- 'Aux_emerg_abril_valor': valor médio do auxílio emergencial em abril/2020.
+- 'Aux_emerg_maio_n': número de pessoas que receberam o auxílio emergencial em maio/2020.
+- 'Aux_emerg_maio_valor': valor médio do auxílio emergencial em maio/2020.
+- 'Aux_emerg_junho_n': número de pessoas que receberam o auxílio emergencial em junho/2020.
+- 'Aux_emerg_junho_valor': valor médio do auxílio emergencial em junho/2020.
+- 'Aux_emerg_julho_n': número de pessoas que receberam o auxílio emergencial em julho/2020.
+- 'Aux_emerg_julho_valor': valor médio do auxílio emergencial em julho/2020.

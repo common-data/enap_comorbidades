@@ -142,6 +142,17 @@ choices = ['Confirmados com Mortes', 'Confirmados sem Mortes']
 indicadores["Status_Covid"] = np.select(conditions, choices, default='Sem confirmados')
 
 
+# Adicionando auxìlio emergencial abril-julho
+# Adding emergencial from April to July
+aux_emerg = pd.read_csv("enap_comorbidades\dados\AE_04_07.csv", encoding="utf-8") # , delimiter=";"
+aux_emerg.drop(["ENQUADRAMENTO_n", "VALORBENEFÍCIO_mean"], axis=1, inplace=True)
+aux_emerg.columns = ['COD_IBGE', 'Aux_emerg_abril_n', 'Aux_emerg_abril_valor',
+                     'Aux_emerg_maio_n', 'Aux_emerg_maio_valor',
+                     'Aux_emerg_junho_n', 'Aux_emerg_junho_valor',
+                     'Aux_emerg_julho_n', 'Aux_emerg_julho_valor']
+indicadores = indicadores.merge(aux_emerg, how='left', on='COD_IBGE', copy=False, validate="one_to_one")
+
+
 # Transformando em um banco de dados CSV
 # Sending to a CSV file
 indicadores.to_csv("enap_comorbidades\dados\covid_indicadores_20200731.csv", index=False, encoding='utf-8-sig')
