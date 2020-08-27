@@ -51,11 +51,14 @@ As colunas finais são:
 - `Aceleracao_confirmados`: número médio de confirmados por dia no municipio/UF.
 - `Aceleracao_mortes`: número médio de mortes por dia no município/UF.
 - `Status_Covid`: status do município/UF de acordo com o Covid-19, podendo ser `Confirmados com Mortes`, `Confirmados sem Mortes` ou `Sem confirmados`.
+
 - 'Aux_emerg_abril_n': número de pessoas que receberam o auxílio emergencial em abril/2020.
 - 'Aux_emerg_abril_valor': valor médio do auxílio emergencial em abril/2020.
 - 'Aux_emerg_maio_n': número de pessoas que receberam o auxílio emergencial em maio/2020.
-- 'Aux_emerg_maio_valor': valor médio do auxílio emergencial em maio/2020.
+- 'Aux_emerg_maio_valor': valor médio do auxílio emergencial em maio/2020
 - 'Aux_emerg_junho_n': número de pessoas que receberam o auxílio emergencial em junho/2020.
 - 'Aux_emerg_junho_valor': valor médio do auxílio emergencial em junho/2020.
 - 'Aux_emerg_julho_n': número de pessoas que receberam o auxílio emergencial em julho/2020.
 - 'Aux_emerg_julho_valor': valor médio do auxílio emergencial em julho/2020.
+- `Aux_emerg_valor_medio`: valor médio mensal do auxílio emergencial entre abril e julho/2020.
+- `Aux_emerg_maio_n_100mil`: número de pessoas que receberam o auxílio emergencial em maio/2020 por 100.000 habitantes do Código IBGE.

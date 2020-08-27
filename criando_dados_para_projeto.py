@@ -88,7 +88,6 @@ indicadores.loc[indicadores["codigo_ibge"] == 4215695,["nome"]] = "Santiago do S
 
 indicadores.loc[indicadores["tipo"] == "CapitalMun",["tipo"]] = "Capital"
 
-
 # Renomeando as variàveis e reordenando
 # Renaming the variables and reordering columns
 indicadores.rename(columns={"codigo_ibge":"COD_IBGE","nome":"Nome","codigo_uf":"COD_UF","Região":"Regiao",
@@ -143,14 +142,21 @@ indicadores["Status_Covid"] = np.select(conditions, choices, default='Sem confir
 
 
 # Adicionando auxìlio emergencial abril-julho
-# Adding emergencial from April to July
+# Adding emergencial payment from April to July
 aux_emerg = pd.read_csv("enap_comorbidades\dados\AE_04_07.csv", encoding="utf-8") # , delimiter=";"
 aux_emerg.drop(["ENQUADRAMENTO_n", "VALORBENEFÍCIO_mean"], axis=1, inplace=True)
+for i in ["ValorAbril", "ValorMaio", "ValorJunho", "ValorJulho"]:
+    aux_emerg[i] = aux_emerg[i] * 10
+aux_emerg["Aux_emerg_valor"] = (aux_emerg["Abril"] * aux_emerg["ValorAbril"] + aux_emerg["Maio"] * aux_emerg["ValorMaio"]
+                                + aux_emerg["Junho"] * aux_emerg["ValorJunho"] + aux_emerg["Julho"] * aux_emerg["ValorJulho"]
+                                ) / (aux_emerg["Abril"] + aux_emerg["Maio"] + aux_emerg["Junho"] + aux_emerg["Julho"])
 aux_emerg.columns = ['COD_IBGE', 'Aux_emerg_abril_n', 'Aux_emerg_abril_valor',
                      'Aux_emerg_maio_n', 'Aux_emerg_maio_valor',
                      'Aux_emerg_junho_n', 'Aux_emerg_junho_valor',
-                     'Aux_emerg_julho_n', 'Aux_emerg_julho_valor']
+                     'Aux_emerg_julho_n', 'Aux_emerg_julho_valor', 'Aux_emerg_valor_medio']
+
 indicadores = indicadores.merge(aux_emerg, how='left', on='COD_IBGE', copy=False, validate="one_to_one")
+indicadores["Aux_emerg_maio_n_100mil"] = indicadores["Aux_emerg_maio_n"] / indicadores["Pop_estimada_2019"] * 100000
 
 
 # Transformando em um banco de dados CSV
