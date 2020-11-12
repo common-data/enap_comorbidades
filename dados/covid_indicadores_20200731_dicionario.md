@@ -1,6 +1,6 @@
 # Dicionário de variáveis
 
-Esse documento visa apresentar o que cada variàvel significa no banco de dados `covid_indicadores_20200731.csv`. Cada linha é equivalente a um código IBGE (podendo ser município ou Unidade da Federação do Brasil). Esse arquivo consta todos os municípios e Unidades da Federação do Brasil.
+Esse documento visa apresentar o que cada variàvel significa no banco de dados `covid_indicadores_20200731.csv`e `covid_indicadores_20200731_clusters.xlsx`. Cada linha é equivalente a um código IBGE (podendo ser município ou Unidade da Federação do Brasil). Esse arquivo consta todos os municípios e Unidades da Federação do Brasil.
 
 As fontes de dados utilizadas foram:
 - [Atlas do IDH-M](http://atlasbrasil.org.br/2013/) para os indicadoresç
@@ -40,12 +40,12 @@ As colunas finais são:
 - `IDHM_L`: a parte da longevidade do IDHM.
 - `IDHM_R`: a parte da renda do IDHM.
 
-- `Confirmados`: número de casos confirmados acumulados até o dia 31/07/1986.
-- `Mortes`: número de mortes acumuladas até o dia 31/07/1986.
-- `Confirmados_100mil`: número de casos confirmados acumulados até o dia 31/07/1986 por 100.000 habitantes do Código IBGE.
-- `Mortes_100mil`: número de mortes acumuladas até o dia 31/07/1986 por 100.000 habitantes do Código IBGE.
-- `Dias_primeiro_confirmado`: número de dias entre 31/07/1986 e a data do primeiro caso confirmado.
-- `Dias_primeira_morte`: número de dias entre 31/07/1986 e a data da primeira morte.
+- `Confirmados`: número de casos confirmados acumulados até o dia 31/07/2020.
+- `Mortes`: número de mortes acumuladas até o dia 31/07/2020.
+- `Confirmados_100mil`: número de casos confirmados acumulados até o dia 31/07/2020 por 100.000 habitantes do Código IBGE.
+- `Mortes_100mil`: número de mortes acumuladas até o dia 31/07/2020 por 100.000 habitantes do Código IBGE.
+- `Dias_primeiro_confirmado`: número de dias entre 31/07/2020 e a data do primeiro caso confirmado.
+- `Dias_primeira_morte`: número de dias entre 31/07/2020 e a data da primeira morte.
 - `Dias_ate_morte`: número de dias entre o primeiro caso confirmado e a primeira morte.
 - `Dias_ate_confirmado_brasil`: número de dias entre o primeiro caso brasileiro e o primeiro caso confirmado no município/UF.
 - `Aceleracao_confirmados`: número médio de confirmados por dia no municipio/UF.
@@ -62,3 +62,10 @@ As colunas finais são:
 - 'Aux_emerg_julho_valor': valor médio do auxílio emergencial em julho/2020.
 - `Aux_emerg_valor_medio`: valor médio mensal do auxílio emergencial entre abril e julho/2020.
 - `Aux_emerg_maio_n_100mil`: número de pessoas que receberam o auxílio emergencial em maio/2020 por 100.000 habitantes do Código IBGE.
+
+As próximas colunas só contém no arquivo '_clusters.xlsx':
+
+- `COMP1`: Componente Principal 1 da Anàlise de Componentes Principais gerada no projeto.
+- `COMP2`: Componente Principal 2 da Anàlise de Componentes Principais gerada no projeto.
+- `COMP3`: Componente Principal 3 da Anàlise de Componentes Principais gerada no projeto.
+- `Cluster`:  grupo, de 0 a 6, gerado na Análise de Agrupamento do projeto.

@@ -163,3 +163,14 @@ indicadores["Aux_emerg_maio_n_100mil"] = indicadores["Aux_emerg_maio_n"] / indic
 # Sending to a CSV file
 indicadores.to_csv("enap_comorbidades\dados\covid_indicadores_20200731.csv", index=False, encoding='utf-8-sig')
 indicadores.columns
+
+
+
+# Pegando os dados após a análise de agrupamento e deixando apenas o modelo escolhido
+# Getting database after cluster analysis e leaving only the chosen model
+cluster = pd.read_csv("enap_comorbidades\dados\covid_indicadores_20200731_municipios_clusters_v3.csv")
+del cluster['cluster_tudo_com100mil_7'], cluster['cluster_fat_com100mil_6'], cluster['cluster_semdiasatemorte_5'], cluster['cluster_semdiasatemorte_6'], cluster['cluster_semdiasatemorte_7']
+cluster.rename(columns={'INDIC1':'COMP1', 'INDIC2': 'COMP2', 'INDIC3': 'COMP3', 'cluster_fat_com100mil_7':'Cluster'}, inplace=True)
+
+cluster.to_excel("enap_comorbidades\\dados\\covid_indicadores_20200731_clusters.xlsx", sheet_name="Cluster",
+                freeze_panes=(1,2), index=False, encoding='latin-1', engine='xlsxwriter')
